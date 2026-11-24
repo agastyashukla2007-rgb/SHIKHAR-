@@ -13,6 +13,7 @@ import {
   Menu,
   PlayCircle,
   ShieldCheck,
+  Smartphone,
   Trophy,
   User as UserIcon,
   Wifi,
@@ -23,11 +24,13 @@ import { AnimatedVideoAndMindMap } from './components/AnimatedVideoAndMindMap';
 import { AnalyticsTutorPlanner } from './components/AnalyticsTutorPlanner';
 import { AuthModal } from './components/AuthModal';
 import { DailyDigestHub } from './components/DailyDigestHub';
+import { InstallAppModal, OfflineIndicator } from './components/InstallAppModal';
 import { LeaderboardOfflineAdmin } from './components/LeaderboardOfflineAdmin';
 import { PdfAndQuizLab } from './components/PdfAndQuizLab';
 import { PyqAndMockCenter } from './components/PyqAndMockCenter';
 import { useAuth } from './contexts/AuthContext';
 import { ALLOWED_TARGET_EXAMS, TargetExamChoice } from './firebase';
+import { usePWAInstall } from './hooks/usePWAInstall';
 import {
   CurrentAffairsPeriod,
   ExamTrendItem,
@@ -77,8 +80,10 @@ export default function App() {
   const [section, setSection] = useState<NavSection>('overview');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [installModalOpen, setInstallModalOpen] = useState(false);
   const [language, setLanguage] = useState<LanguageMode>('bilingual');
   const [isOfflineSimulated, setIsOfflineSimulated] = useState(false);
+  const { isInstallable } = usePWAInstall();
 
   // Server-fetched baseline data
   const [pyqQuestions, setPyqQuestions] = useState<QuizQuestion[]>([]);
@@ -256,6 +261,14 @@ export default function App() {
               Login (Gmail / Phone)
             </button>
           )}
+          <button
+            type="button"
+            onClick={() => setInstallModalOpen(true)}
+            className="w-full py-2 px-3 border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>Install App / APK</span>
+          </button>
           <div className="text-slate-500">
             All-Access Free Early Edition · 3-Pass Verified
           </div>
@@ -334,6 +347,17 @@ export default function App() {
                   Login (Gmail / Phone)
                 </button>
               )}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setInstallModalOpen(true);
+                }}
+                className="w-full mt-2 py-2 px-3 border border-blue-200 bg-blue-50 text-blue-800 text-xs font-semibold rounded-lg flex items-center justify-center gap-2"
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                <span>Install App / Download APK</span>
+              </button>
             </div>
           </aside>
         </div>
@@ -415,6 +439,16 @@ export default function App() {
 
             <button
               type="button"
+              onClick={() => setInstallModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-blue-800 border border-blue-200 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors whitespace-nowrap shrink-0"
+              title="Install on Android / Download APK"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{isInstallable ? 'Install App' : 'App / APK'}</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setSection('quiz-lab')}
               className="px-4 py-2 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg transition-colors whitespace-nowrap shrink-0"
             >
@@ -488,6 +522,14 @@ export default function App() {
                       className="px-4 py-2.5 text-sm font-medium text-slate-700 border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors"
                     >
                       Attempt CBT Mock
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setInstallModalOpen(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-blue-800 bg-blue-50 border border-blue-200 hover:bg-blue-100 rounded-lg transition-colors"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      <span>Download APK / Install App</span>
                     </button>
                   </div>
                 </div>
@@ -643,6 +685,8 @@ export default function App() {
       </div>
 
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
+      <InstallAppModal isOpen={installModalOpen} onClose={() => setInstallModalOpen(false)} />
+      <OfflineIndicator />
     </div>
   );
 }
