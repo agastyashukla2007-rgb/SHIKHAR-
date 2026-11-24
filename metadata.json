@@ -1,0 +1,10 @@
+{
+  "name": "SankalpPrep — AI Government Exam Ecosystem",
+  "description": "Bilingual (Hindi & English) AI-powered government exam preparation platform for SSC, Railway, Banking, Defence, Police, Teaching, and State PCS with 3-pass proofread quizzes, PDF/image quiz generation, animated concept lessons, PYQ intelligence, CBT mocks, and daily current affairs.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

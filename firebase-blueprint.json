@@ -1,0 +1,240 @@
+{
+  "entities": {
+    "UserPublicProfile": {
+      "title": "UserPublicProfile",
+      "description": "Public-safe aspirant profile storing non-PII exam target, streak, and XP metrics.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the student.",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the student.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "targetExam": {
+          "type": "string",
+          "description": "Primary target exam category.",
+          "enum": ["SSC", "Railway", "Banking", "Defence", "Police", "Teaching", "State PCS", "All"]
+        },
+        "xp": {
+          "type": "integer",
+          "description": "Total earned experience points."
+        },
+        "streakDays": {
+          "type": "integer",
+          "description": "Consecutive daily study streak."
+        },
+        "accuracyPercent": {
+          "type": "number",
+          "description": "Overall accuracy percentage."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last-updated timestamp."
+        }
+      },
+      "required": ["uid", "displayName", "targetExam", "xp", "streakDays", "accuracyPercent", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated PII record for the student's verified email, phone number, and WhatsApp preference.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID.",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "description": "Verified Gmail/Google email address.",
+          "maxLength": 200
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Verified E.164 phone number.",
+          "maxLength": 32
+        },
+        "authProvider": {
+          "type": "string",
+          "description": "Sign-in provider used.",
+          "enum": ["google", "phone"]
+        },
+        "whatsappOptIn": {
+          "type": "boolean",
+          "description": "Whether user opted into 9 AM WhatsApp Current Affairs."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["uid", "authProvider", "whatsappOptIn", "createdAt", "updatedAt"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Completed quiz or mock test attempt synced for cross-device performance tracking.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "quizId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "exam": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "score": {
+          "type": "number"
+        },
+        "maxScore": {
+          "type": "number"
+        },
+        "correctCount": {
+          "type": "integer"
+        },
+        "incorrectCount": {
+          "type": "integer"
+        },
+        "unansweredCount": {
+          "type": "integer"
+        },
+        "accuracyPercent": {
+          "type": "number"
+        },
+        "avgTimePerQuestionSec": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "quizId",
+        "title",
+        "subject",
+        "exam",
+        "score",
+        "maxScore",
+        "correctCount",
+        "incorrectCount",
+        "unansweredCount",
+        "accuracyPercent",
+        "avgTimePerQuestionSec",
+        "createdAt"
+      ]
+    },
+    "SavedStudyItem": {
+      "title": "SavedStudyItem",
+      "description": "Bookmarked question, mistake notebook item, or saved vocabulary item.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "itemType": {
+          "type": "string",
+          "enum": ["bookmark", "mistake", "vocab"]
+        },
+        "refId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "itemType", "refId", "title", "subject", "createdAt"]
+    },
+    "AdminMember": {
+      "title": "AdminMember",
+      "description": "Trusted administrator membership marker document.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "grantedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "grantedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserPublicProfile" },
+      "description": "Non-PII student profile document."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Isolated student PII (verified email and phone number)."
+    },
+    "/users/{userId}/attempts/{attemptId}": {
+      "schema": { "$ref": "#/entities/QuizAttempt" },
+      "description": "Student quiz and CBT mock test attempt records."
+    },
+    "/users/{userId}/savedItems/{itemId}": {
+      "schema": { "$ref": "#/entities/SavedStudyItem" },
+      "description": "Student saved bookmarks, mistake notebook entries, and vocabulary items."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminMember" },
+      "description": "Explicit trusted admin allowlist."
+    }
+  }
+}
